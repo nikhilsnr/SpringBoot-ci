@@ -52,14 +52,17 @@ pipeline {
         }
 
         stage('Start Application') {
-            steps {
-                bat '''
-                echo Starting Spring Boot application...
-                cd target
-                start "" java -jar %JAR_NAME%
-                '''
-            }
-        }
+    steps {
+        bat '''
+        echo JAVA_HOME used by Jenkins: %JAVA_HOME%
+        echo Starting Spring Boot application using Java 17...
+
+        cd target
+        start "" "%JAVA_HOME%\\bin\\java" -jar %JAR_NAME%
+        '''
+    }
+}
+
     }
 
     post {
