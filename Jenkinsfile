@@ -7,51 +7,55 @@ pipeline {
     }
 
     environment {
-        DEPLOY_DIR = 'D:\\deploy\\springboot-ci'
-        JAR_NAME = 'git-0.0.1-SNAPSHOT.jar'
+        APP_NAME = "git"
+        JAR_NAME = "git-0.0.1-SNAPSHOT.jar"
+        APP_PORT = "8081"
     }
 
     stages {
 
-        stage('Checkout') {
+        stage('Checkout Code') {
             steps {
-                checkout scm
+                git branch: 'main',
+                    url: 'https://github.com/nikhilsnr/SpringBoot-ci.git'
             }
         }
 
-        stage('Build & Test') {
-            steps {
-                bat 'mvn clean test'
-            }
-        }
-
-        stage('Package') {
+        stage('Build Application') {
             steps {
                 bat 'mvn clean package -DskipTests'
             }
         }
 
-        stage('Deploy') {
-    steps {
-        echo 'Deploying Spring Boot application'
+        stage('Stop Existing Application') {
+            steps {
+                bat '''
+                echo Checking if application is running...
+                for /f "tokens=5" %%a in ('netstat -ano ^| findstr :%APP_PORT%') do (
+                    echo Killing process %%a
+                    taskkill /F /PID %%a
+                )
+                '''
+            }
+        }
 
-        bat """
-        if exist %DEPLOY_DIR%\\stop.bat call %DEPLOY_DIR%\\stop.bat
-        copy /Y target\\%JAR_NAME% %DEPLOY_DIR%
-        call %DEPLOY_DIR%\\start.bat
-        """
-    }
-}
-
-
+        stage('Start Application') {
+            steps {
+                bat '''
+                echo Starting Spring Boot Application...
+                cd target
+                start java -jar %JAR_NAME%
+                '''
+            }
+        }
     }
 
     post {
         success {
-            echo 'CI/CD pipeline SUCCESS'
+            echo 'Pipeline executed successfully!'
         }
         failure {
-            echo 'CI/CD pipeline FAILED'
+            echo 'Pipeline failed!'
         }
     }
 }
