@@ -32,16 +32,17 @@ pipeline {
         }
 
         stage('Deploy') {
-            steps {
-                echo 'Deploying Spring Boot application'
+    steps {
+        echo 'Deploying Spring Boot application'
 
-                bat """
-                if exist %DEPLOY_DIR%\\stop.bat call %DEPLOY_DIR%\\stop.bat
-                copy /Y target\\%JAR_NAME% %DEPLOY_DIR%
-                call %DEPLOY_DIR%\\start.bat
-                """
-            }
-        }
+        bat """
+        if exist %DEPLOY_DIR%\\stop.bat call %DEPLOY_DIR%\\stop.bat
+        copy /Y target\\%JAR_NAME% %DEPLOY_DIR%
+        call %DEPLOY_DIR%\\start.bat
+        """
+    }
+}
+
     }
 
     post {
