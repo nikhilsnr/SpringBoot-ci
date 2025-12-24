@@ -19,6 +19,7 @@ public class LoginController {
                           HttpSession session,
                           Model model) {
 
+    	
         // Dummy authentication
         if ("admin".equals(username) && "admin123".equals(password)) {
             session.setAttribute("username", username);
