@@ -7,7 +7,7 @@ pipeline {
     }
 
     environment {
-        DEPLOY_DIR = 'D:\\deploy\\springboot-ci'
+        DEPLOY_DIR = 'D:\\deploy\springboot-ci'
         JAR_NAME = 'git-0.0.1-SNAPSHOT.jar'
     }
 
