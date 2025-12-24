@@ -25,13 +25,13 @@
                     <form action="login" method="post">
 
                         <div class="mb-3">
-                            <label class="form-label">Username</label>
+                            <label class="form-label">Uname</label>
                             <input type="text" name="username"
                                    class="form-control" required>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Password</label>
+                            <label class="form-label">Pwd</label>
                             <input type="password" name="password"
                                    class="form-control" required>
                         </div>
