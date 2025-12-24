@@ -23,6 +23,7 @@ pipeline {
 
         stage('Build Application') {
             steps {
+                echo 'Building Spring Boot application...'
                 bat 'mvn clean package -DskipTests'
             }
         }
@@ -30,11 +31,22 @@ pipeline {
         stage('Stop Existing Application') {
             steps {
                 bat '''
-                echo Checking if application is running...
+                echo Checking if application is running on port %APP_PORT%...
+
+                set FOUND=false
+
                 for /f "tokens=5" %%a in ('netstat -ano ^| findstr :%APP_PORT%') do (
+                    set FOUND=true
                     echo Killing process %%a
                     taskkill /F /PID %%a
                 )
+
+                if "%FOUND%"=="false" (
+                    echo No running application found on port %APP_PORT%
+                )
+
+                echo Stop stage completed successfully
+                exit /b 0
                 '''
             }
         }
@@ -42,9 +54,9 @@ pipeline {
         stage('Start Application') {
             steps {
                 bat '''
-                echo Starting Spring Boot Application...
+                echo Starting Spring Boot application...
                 cd target
-                start java -jar %JAR_NAME%
+                start "" java -jar %JAR_NAME%
                 '''
             }
         }
@@ -52,10 +64,10 @@ pipeline {
 
     post {
         success {
-            echo 'Pipeline executed successfully!'
+            echo '✅ CI/CD pipeline executed successfully!'
         }
         failure {
-            echo 'Pipeline failed!'
+            echo '❌ CI/CD pipeline failed. Check logs.'
         }
     }
 }
