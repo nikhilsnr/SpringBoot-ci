@@ -28,6 +28,7 @@ public class LoginController {
 
         model.addAttribute("error", "Invalid username or password");
         return "login";
+        
     }
 
     @GetMapping("/welcome")
