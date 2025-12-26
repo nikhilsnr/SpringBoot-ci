@@ -10,7 +10,6 @@ public class LoginController {
 
     @GetMapping("/login")
     public String showLoginPage() {
-    	
         return "login";
     }
 
@@ -36,6 +35,7 @@ public class LoginController {
 
         String username = (String) session.getAttribute("username");
 
+        System.out.println("Inside Welcome");
         if (username == null) {
             return "redirect:/login";
         }
