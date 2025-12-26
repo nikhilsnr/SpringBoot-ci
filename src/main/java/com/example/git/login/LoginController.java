@@ -34,7 +34,6 @@ public class LoginController {
     public String welcomePage(HttpSession session, Model model) {
 
         String username = (String) session.getAttribute("username");
-
         System.out.println("Inside Welcome");
         
         if (username == null) {
